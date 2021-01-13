@@ -1,1 +1,1 @@
-# Embed-Web-Map-SF
+# Embed Web Map in Salesforce Lightning Web Component
