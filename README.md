@@ -48,11 +48,22 @@ More complex workflows, often require custom capabilities that cannot be met wit
 - [Geocoding with an additional plugin](https://github.com/Esri/esri-leaflet-geocoder)
 - [Geoprocessing Services with an additional plugin](https://github.com/jgravois/esri-leaflet-gp)
 
+### Implementation Steps
 
-To make the example work, the JavaScript libraries need to be loaded into your Salesforce instance as a Static Resource
+1. Place all of the files in a single directory and compress them into a single ZIP files
+2. Upload the ZIP file to Salesforce as a Static Resources
+3. Reference the item as a Static Resource in the Lightning Web Component JS files
+4. In a [renderedCallback](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.create_lifecycle_hooks_rendered) hook,use the [loadStyle and loadScript](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.js_third_party_library) methods to load the necessary components
+5. Add the necessary URL's to the CSP Trusted Sites
 
 #### Additional Resources
+[Leaflet](https://leafletjs.com/)
 
 ##### Esri Resources
+[Esri Leaflet Plugin](https://github.com/Esri/esri-leaflet)
 
 ##### Salesforce
+[Static Resources](https://help.salesforce.com/articleView?id=sf.pages_static_resources.htm&type=5)
+[renderedCallback](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.create_lifecycle_hooks_rendered)
+[Platform Resource Loader](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.js_third_party_library)
+[Content Security Policy](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/security_csp.htm)
