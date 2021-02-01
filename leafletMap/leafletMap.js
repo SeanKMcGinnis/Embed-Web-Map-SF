@@ -31,9 +31,7 @@ export default class LeafletMap extends LightningElement {
         })
     }    
     initializeMap(){
-        console.log('>>>>Initialized: Houston, we have Leaflet!');
-        var map = L.map(this.template.querySelector(".map-root")).setView([37.75, -122.23], 10);
-        console.log('>>>>Initialized: map built');
+        var map = L.map(this.template.querySelector(".map-root")).setView([34.05, -117.20], 13);
         L.esri.basemapLayer('Topographic').addTo(map);
     }
 }
