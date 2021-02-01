@@ -35,3 +35,13 @@ Example to embed an ArcGIS Online app in a Lightning Web Component for use in Sa
 [Introducing Lightning Web Components](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.get_started_introduction)
 
 [Lightning Web Component Configuration File Tags](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.reference_configuration_tags)
+
+## Esri Leaflet
+
+More complex workflows, often require custom capabilities that cannot be met with configurable components. This example uses the Esri Leaflet plugin to work with ArcGIS Services, including:
+
+- Basemaps
+- Feature Services
+- Tiled Map Services
+- Dynamic Maps Services
+- Image Services
