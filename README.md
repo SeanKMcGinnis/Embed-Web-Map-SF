@@ -2,7 +2,7 @@
 
 There are many ways to integrate ArcGIS components with Salesforce and Salesforce data. The repository contain examples on how to integrate ArcGIS and Salesforce.
 
-![image](https://user-images.githubusercontent.com/3063562/104955485-4dcb4400-5998-11eb-9980-060f60be978a.png)
+![image](https://user-images.githubusercontent.com/3063562/106500469-dd401f00-648f-11eb-9b59-d55b549a1779.png)
 
 ## Embed Web Map in Salesforce Lightning Web Component
 
