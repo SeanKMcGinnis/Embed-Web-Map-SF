@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Load JS Force from CDN --->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jsforce/1.9.1/jsforce.min.js"></script>
+  <!-- Load Leaflet from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
+  <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js"></script>
+  <!-- Page CSS files -->
+  <link rel="stylesheet" href="lib/css/style.css">
+</head>
+<body>
+  <header>
+    <button id="log-in-button" class="float-right" onclick="javascript:jsforce.browser.login();">Log In</button>
+    <button id="log-out-button" class="float-right hidden" onclick="logOut()">Log Out</button>
+    <h1>JS Force & ArcGIS Platform Integration with LeafletJS</h1>
+  </header>
+    <div class="grid-container">
+      <div>
+        <h2 id="description-header">Example Description</h2>
+        <p>The example utilizes the JSForce Javascript Library and Leaflet to
+        authenticate a user in Salesforce query for the accounts they own and
+        place them as markers in a LeafletJS Map. The LeafletJS map is utilizing
+        an ArcGIS Platform API Key to bring in basemap tiles.</p>
+        <h2 id="account-list-header" class="hidden">Account List</h2>
+        <ul id="account-list"></ul>
+        <p id="list-legend" class="hidden"><strong>Please Note:</strong> accounts shown in
+        <span class="warning">ORANGE</span> do not have either a Billing Latitude
+        or Billing Longitude associated with the record in Salesforce</p>
+      </div>
+      <div id="map"></div>
+    </div>
+  <script>
+    const apiKey = "---Your ArcGIS Platform API Key---";    // ArcGIS Platform API Key
+    const basemapEnum = "ArcGIS:Streets";                   // Basemap
+    const map = L.map('map', {
+        minZoom: 2
+      }).setView([0, 0], 2);
+      L.esri.Vector.vectorBasemapLayer(basemapEnum, {
+        apiKey: apiKey
+      }).addTo(map);
+
+
+    jsforce.browser.init({
+      clientId: '---Your Salesforce Consumer Key---',
+      redirectUri: '---Your Application URL---'
+    });
+    // Perform the following logic when the connection to the Salesforce Organization has been made
+    jsforce.browser.on('connect', function(conn) {
+      // Basic object visibility handling
+      document.getElementById("log-in-button").classList.add("hidden");
+      document.getElementById("log-out-button").classList.remove("hidden");
+      document.getElementById("account-list-header").classList.remove("hidden");
+      document.getElementById("list-legend").classList.remove("hidden");
+      // Query the Account Object for Name and the Lat & Long for their billing location
+      // Please refer to Salesforce's documentation on Data integration Rules for geocoding
+      conn.query('SELECT Id, Name, BillingLatitude, BillingLongitude FROM Account', function(err, recs) {
+        // Review the error
+        if (err) { return console.error(err); }
+        // Iterate through the records
+        for(i in recs.records){
+          var accountName = document.createElement("li");
+            accountName.innerText = recs.records[i].Name;
+          if(recs.records[i].BillingLatitude === null || recs.records[i].BillingLongitude === null){
+            accountName.classList.add("warning")
+          } else {
+            L.marker([recs.records[i].BillingLatitude, recs.records[i].BillingLongitude]).addTo(map);
+          }
+          document.getElementById("account-list").appendChild(accountName);
+        }
+
+      });
+    });
+    // Log out of Salesforce
+    function logOut(){
+      console.log("Logging Out");
+      jsforce.browser.logout();
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
