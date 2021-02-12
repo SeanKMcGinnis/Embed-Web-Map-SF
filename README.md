@@ -8,6 +8,8 @@ There are many ways to integrate ArcGIS components with Salesforce and Salesforc
 
 Example to embed an ArcGIS Online Web Map in a Lightning Web Component for use in Salesforce Lightning pages.
 
+![image](https://user-images.githubusercontent.com/3063562/107782164-be0a8280-6d16-11eb-98f0-81987c351746.png)
+
 #### Additional Resources
 
 ##### Esri
@@ -24,6 +26,8 @@ Example to embed an ArcGIS Online Web Map in a Lightning Web Component for use i
 
 Example to embed an ArcGIS Online app in a Lightning Web Component for use in Salesforce Lightning pages.
 
+![image](https://user-images.githubusercontent.com/3063562/107782172-c06cdc80-6d16-11eb-8975-b7539ed1d4dd.png)
+
 #### Additional Resources
 
 ##### Esri
@@ -38,7 +42,11 @@ Example to embed an ArcGIS Online app in a Lightning Web Component for use in Sa
 
 ## Esri Leaflet
 
-More complex workflows, often require custom capabilities that cannot be met with configurable components. You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/) instead of the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/latest/). Salesforce has a file size cap for static resources and there is not an easy way to reduce the file size of the ArcGIS API for JavaScript to meet the 25MB file size. The Esri Leaflet plugin allows us to access ArcGIS System capabilities, including:
+More complex workflows, often require custom capabilities that cannot be met with configurable components. You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/) instead of the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/latest/).
+
+![image](https://user-images.githubusercontent.com/3063562/107782159-bb0f9200-6d16-11eb-994f-07a1018edfef.png)
+
+Salesforce has a file size cap for static resources and there is not an easy way to reduce the file size of the ArcGIS API for JavaScript to meet the 25MB file size. The Esri Leaflet plugin allows us to access ArcGIS System capabilities, including:
 
 - Basemaps
 - Feature Services
