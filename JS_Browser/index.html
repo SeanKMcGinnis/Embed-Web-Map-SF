@@ -32,7 +32,7 @@
         <h2 id="account-list-header" class="hidden">Account List</h2>
         <ul id="account-list"></ul>
         <p id="list-legend" class="hidden"><strong>Please Note:</strong> accounts shown in
-        <span class="warning">ORANGE</span> do not have either a Billing Latitude
+        <span class="warning">ORANGE</span> do not have a Billing Latitude
         or Billing Longitude associated with the record in Salesforce</p>
       </div>
       <div id="map"></div>
@@ -40,6 +40,7 @@
   <script>
     const apiKey = "---Your ArcGIS Platform API Key---";    // ArcGIS Platform API Key
     const basemapEnum = "ArcGIS:Streets";                   // Basemap
+    // Create the map object
     const map = L.map('map', {
         minZoom: 2
       }).setView([0, 0], 2);
@@ -55,10 +56,10 @@
     // Perform the following logic when the connection to the Salesforce Organization has been made
     jsforce.browser.on('connect', function(conn) {
       // Basic object visibility handling
-      document.getElementById("log-in-button").classList.add("hidden");
-      document.getElementById("log-out-button").classList.remove("hidden");
-      document.getElementById("account-list-header").classList.remove("hidden");
-      document.getElementById("list-legend").classList.remove("hidden");
+      L.DomUtil.get("log-in-button").classList.add("hidden");
+      L.DomUtil.get("log-out-button").classList.remove("hidden");
+      L.DomUtil.get("account-list-header").classList.remove("hidden");
+      L.DomUtil.get("list-legend").classList.remove("hidden");
       // Query the Account Object for Name and the Lat & Long for their billing location
       // Please refer to Salesforce's documentation on Data integration Rules for geocoding
       conn.query('SELECT Id, Name, BillingLatitude, BillingLongitude FROM Account', function(err, recs) {
@@ -66,14 +67,14 @@
         if (err) { return console.error(err); }
         // Iterate through the records
         for(i in recs.records){
-          var accountName = document.createElement("li");
+          var accountName = L.DomUtil.create("li");
             accountName.innerText = recs.records[i].Name;
           if(recs.records[i].BillingLatitude === null || recs.records[i].BillingLongitude === null){
             accountName.classList.add("warning")
           } else {
             L.marker([recs.records[i].BillingLatitude, recs.records[i].BillingLongitude]).addTo(map);
           }
-          document.getElementById("account-list").appendChild(accountName);
+          L.DomUtil.get("account-list").appendChild(accountName);
         }
 
       });

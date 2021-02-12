@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jsforce/1.9.1/jsforce.min.js"></script>
+  <!-- Load Leaflet from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
+  <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js"></script>
+  <!-- Page CSS files -->
+  <link rel="stylesheet" href="lib/css/compare.css">
+</head>
+<body>
+  <header>
+    <button id="log-in-button" class="float-right" onclick="javascript:jsforce.browser.login();">Log In</button>
+    <button id="log-out-button" class="float-right hidden" onclick="logOut()">Log Out</button>
+    <h1>Address Geocode Comparisons</h1>
+  </header>
+  <div id="account-container"></div>
+  <script>
+    const apiKey = "AAPKaf718e2d0c8a46c488a857acc3ecb403Pr05YVWz7EixXC5cCW2m2XQKRcv-gAvWLkN0n34M_ECe9sneakklCf4FNdWLR7PR";
+    const urlGeocode = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates";
+    const basemapEnum = "ArcGIS:Streets";
+    const markerEsri = L.icon({
+      iconUrl: 'lib/img/purple_marker.png',
+      iconSize: [25, 40]
+    })
+    jsforce.browser.init({
+      clientId: '3MVG9kBt168mda_9QKNvP2wF.bB4GopiOQmVVno0A3r2SMZswvhVzvKLs4aHO1IzJr_MhAuiRfO4gBl_ajVpa',
+      redirectUri: 'http://localhost:8000'
+    });
+
+    jsforce.browser.on('connect', function(conn) {
+      L.DomUtil.get("log-in-button").classList.add("hidden");
+      L.DomUtil.get("log-out-button").classList.remove("hidden");
+      var accountContainer = L.DomUtil.get("account-container");
+      conn.query('SELECT Id, Name, BillingLatitude, BillingLongitude, BillingGeocodeAccuracy, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry FROM Account', function(err, recs) {
+        if (err) { return console.error(err); }
+        console.log(recs);
+        for(i in recs.records){
+          //console.log(recs.records[i].Name)
+          var accountDetail = L.DomUtil.create("div");
+          var accountLabel = L.DomUtil.create("h3","", accountDetail);
+          accountLabel.innerHTML= recs.records[i].Name;
+          var accountSection = L.DomUtil.create("div", "grid-container", accountDetail);
+          // Salesforce Address Information
+          var sectionSalesforce = L.DomUtil.create("div", null, accountSection);
+          //var markerSalesforce = L.DomUtil.create("img", null, sectionSalesforce);
+          //markerSalesforce.src = "lib/img/marker-icon.png";
+          var sectionSFHeader = L.DomUtil.create("h3", "", sectionSalesforce);
+          sectionSFHeader.innerHTML = '<img src="lib/img/marker-icon.png" > Salesforce Address Data';
+          var sectionSFStreet = L.DomUtil.create("p", null, sectionSalesforce);
+          sectionSFStreet.innerHTML = recs.records[i].BillingStreet;
+          var sectionSFRegional = L.DomUtil.create("p", null, sectionSalesforce);
+          sectionSFRegional.innerHTML = recs.records[i].BillingCity + ", " + recs.records[i].BillingState + " " + recs.records[i].BillingPostalCode +" " + recs.records[i].BillingCountry;
+          var sectionSFAccuracy = L.DomUtil.create("p", "new-section", sectionSalesforce);
+          sectionSFAccuracy.innerHTML = "<b>Geocode Match Type:</b> " + recs.records[i].BillingGeocodeAccuracy;
+          var sectionSFLatitude = L.DomUtil.create("p", null, sectionSalesforce);
+          if(recs.records[i].BillingLatitude !== null){
+              sectionSFLatitude.innerHTML = "<b>Latitude:</b> " + recs.records[i].BillingLatitude;
+          } else {
+            sectionSFLatitude.innerHTML = "<b>Latitude:</b> Unknown";
+          }
+          var sectionSFLongitude = L.DomUtil.create("p", null, sectionSalesforce);
+          if(recs.records[i].BillingLongitude !== null){
+              sectionSFLongitude.innerHTML = "<b>Longitude:</b> " + recs.records[i].BillingLongitude;
+          } else {
+            sectionSFLongitude.innerHTML = "<b>Longitude:</b> Unknown";
+          }
+          accountContainer.appendChild(accountDetail);
+          // Esri Geocoding Section
+          var sectionEsri = L.DomUtil.create("div", null, accountSection);
+          var sectionEsriHeader = L.DomUtil.create("h3", null, sectionEsri);
+          sectionEsriHeader.innerHTML = '<img src="lib/img/purple_marker.png" > Esri Geocode Data';
+          var sectionMap = L.DomUtil.create("div", "map", accountSection);
+          var map = L.map(sectionMap, {
+              maxZoom: 18
+            }).setView([0, 0], 2);
+           L.esri.Vector.vectorBasemapLayer(basemapEnum, {
+                apiKey: apiKey
+            }).addTo(map);
+            if(recs.records[i].BillingLatitude !== null || recs.records[i].BillingLongitude !== null){
+              L.marker([recs.records[i].BillingLatitude, recs.records[i].BillingLongitude]).addTo(map);
+
+            }
+          geocodeArcGIS(recs.records[i].BillingStreet,
+                        recs.records[i].BillingCity,
+                        recs.records[i].BillingState,
+                        recs.records[i].BillingPostalCode,
+                        recs.records[i].BillingCountry,
+                        recs.records[i].BillingLatitude,
+                        recs.records[i].BillingLongitude,
+                        map,
+                        sectionEsri
+                      );
+
+        }
+
+      });
+    });
+    function geocodeArcGIS(BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry, srcLat, srcLong, sectionMap, sectionEsri){
+      var params = {
+        address: BillingStreet,
+        city: BillingCity,
+        region: BillingState,
+        postal: BillingPostalCode,
+        countryCode: BillingCountry,
+        outFields: "*",
+        f: "json",
+        token: apiKey
+      }
+      var regionalDetail = "";
+
+      L.esri.request(urlGeocode, params, function(error, response){
+        if(error){
+          console.log(console.error());
+        } else {
+          console.log(response.candidates[0]);
+          var lat = response.candidates[0].attributes.DisplayY;
+          var long = response.candidates[0].attributes.DisplayX;
+          var sectionEsriRegion = L.DomUtil.create("p", null, sectionEsri);
+          sectionEsriRegion.innerHTML = response.candidates[0].attributes.Match_addr;
+          var sectionEsriAccuracy = L.DomUtil.create("p", "new-section", sectionEsri);
+          sectionEsriAccuracy.innerHTML = "<b>Geocode Match Type:</b> " + response.candidates[0].attributes.Addr_type;
+          var sectionEsriLatitude = L.DomUtil.create("p", null, sectionEsri);
+          sectionEsriLatitude.innerHTML = "<b>Latitude:</b> " + response.candidates[0].attributes.DisplayY.toFixed(4);
+          var sectionEsriLongitude = L.DomUtil.create("p", null, sectionEsri);
+          sectionEsriLongitude.innerHTML = "<b>Longitude:</b> " + response.candidates[0].attributes.DisplayX.toFixed(4);
+          var sectionEsriDistance = L.DomUtil.create("p", "new-section", sectionEsri);
+          var dist = findDistance(srcLat, srcLong, response.candidates[0].attributes.DisplayY, response.candidates[0].attributes.DisplayX);
+          sectionEsriDistance.innerHTML = "<b>Distance between points:</b> " + dist + " miles";
+          L.marker([lat, long], {icon: markerEsri}).addTo(sectionMap);
+          if(srcLat !== null || srcLong !== null){
+            sectionMap.fitBounds([
+              [srcLat, srcLong],
+              [[response.candidates[0].attributes.DisplayY, response.candidates[0].attributes.DisplayX]]
+            ])
+          } else {
+            sectionMap.flyTo(L.latLng([response.candidates[0].attributes.DisplayY, response.candidates[0].attributes.DisplayX]), 10);
+          }
+
+
+        }
+      })
+    }
+    function logOut(){
+      console.log("Logging Out");
+      jsforce.browser.logout();
+      window.location.reload();
+    }
+
+    function findDistance(lat1, lon1, lat2, lon2, unit) {
+    	if ((lat1 == lat2) && (lon1 == lon2)) {
+    		return 0;
+    	}
+    	else {
+    		var radlat1 = Math.PI * lat1/180;
+    		var radlat2 = Math.PI * lat2/180;
+    		var theta = lon1-lon2;
+    		var radtheta = Math.PI * theta/180;
+    		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    		if (dist > 1) {
+    			dist = 1;
+    		}
+    		dist = Math.acos(dist);
+    		dist = dist * 180/Math.PI;
+    		dist = dist * 60 * 1.1515;
+    		if (unit=="K") { dist = dist * 1.609344 }
+    		if (unit=="N") { dist = dist * 0.8684 }
+    		return dist.toFixed(2);
+    	}
+    }
+  </script>
+</body>
+</html>
