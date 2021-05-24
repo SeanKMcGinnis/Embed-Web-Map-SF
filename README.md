@@ -85,4 +85,4 @@ You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-
 
 ## JS Force & ArcGIS Platform Integration with Leaflet JS
 
-Documentation to be written
+*Documentation to be written*
