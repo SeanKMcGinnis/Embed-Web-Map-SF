@@ -1,6 +1,13 @@
 # Esri & Salesforce Integration Examples
 
-There are many ways to integrate ArcGIS components with Salesforce and Salesforce data. The repository contains examples on how to integrate ArcGIS and Salesforce.
+There are many ways to integrate ArcGIS components into Salesforce to leverage Salesforce data. The repository contains examples on three specific methods to integrate ArcGIS and Salesforce:
+
+<ul>
+  <li>Embed an ArcGIS Online Web Map as a Salesforce Lightning Web Component</li>
+  <li>Embed an ArcGIS App as a Salesforce Lightning Web Component</li>
+  <li>Esri Leaflet JavaScript Plugin</li>
+  <li>JS Force JavaScript Library and ArcGIS Platform/li>
+</ul>
 
 ![image](https://user-images.githubusercontent.com/3063562/106500469-dd401f00-648f-11eb-9b59-d55b549a1779.png)
 
@@ -42,11 +49,11 @@ Example to embed an ArcGIS Online app in a Lightning Web Component for use in Sa
 
 ## Esri Leaflet
 
-More complex workflows, often require custom capabilities that cannot be met with configurable components. You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/) instead of the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/latest/).
+More complex workflows, often require custom capabilities that cannot be met with configurable components. To accomplish this, we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/).
 
 ![image](https://user-images.githubusercontent.com/3063562/107782159-bb0f9200-6d16-11eb-994f-07a1018edfef.png)
 
-Salesforce has a file size cap for static resources and there is not an easy way to reduce the file size of the ArcGIS API for JavaScript to meet the 25MB file size. The Esri Leaflet plugin allows us to access ArcGIS System capabilities, including:
+You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/) instead of the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/latest/). Salesforce has a file size cap for static resources and there is not an easy way to reduce the file size of the ArcGIS API for JavaScript to meet the 25MB file size. The Esri Leaflet plugin allows us to access ArcGIS System capabilities, including:
 
 - Basemaps
 - Feature Services
@@ -75,3 +82,7 @@ Salesforce has a file size cap for static resources and there is not an easy way
 [renderedCallback](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.create_lifecycle_hooks_rendered)
 [Platform Resource Loader](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.js_third_party_library)
 [Content Security Policy](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/security_csp.htm)
+
+## JS Force & ArcGIS Platform Integration with Leaflet JS
+
+Documentation to be written
