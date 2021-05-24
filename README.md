@@ -2,12 +2,10 @@
 
 There are many ways to integrate ArcGIS components into Salesforce to leverage Salesforce data. The repository contains examples on three specific methods to integrate ArcGIS and Salesforce:
 
-<ul>
-  <li>Embed an ArcGIS Online Web Map as a Salesforce Lightning Web Component</li>
-  <li>Embed an ArcGIS App as a Salesforce Lightning Web Component</li>
-  <li>Esri Leaflet JavaScript Plugin</li>
-  <li>JS Force JavaScript Library and ArcGIS Platform/li>
-</ul>
+- Embed an ArcGIS Online Web Map as a Salesforce Lightning Web Component
+- Embed an ArcGIS App as a Salesforce Lightning Web Component
+- Esri Leaflet JavaScript Plugin
+- JS Force JavaScript Library and ArcGIS Platform
 
 ![image](https://user-images.githubusercontent.com/3063562/106500469-dd401f00-648f-11eb-9b59-d55b549a1779.png)
 
