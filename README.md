@@ -51,7 +51,7 @@ More complex workflows, often require custom capabilities that cannot be met wit
 
 ![image](https://user-images.githubusercontent.com/3063562/107782159-bb0f9200-6d16-11eb-994f-07a1018edfef.png)
 
-You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/) instead of the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/latest/). Salesforce has a file size cap for static resources and there is not an easy way to reduce the file size of the ArcGIS API for JavaScript to meet the 25MB file size. The Esri Leaflet plugin allows us to access ArcGIS System capabilities, including:
+You may wonder why we are using the [Esri Leaflet](https://github.com/Esri/esri-leaflet) JavaScript plugin for [Leaflet](https://leafletjs.com/) instead of the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/latest/). Salesforce has a file size cap for static resources and there is not an easy way to reduce the file size of the ArcGIS API for JavaScript to meet the 25MB file size. The Esri Leaflet plugin is small enough to upload as a static resource and allows us to access ArcGIS System capabilities, including:
 
 - Basemaps
 - Feature Services
